@@ -1,0 +1,17 @@
+﻿using LibraryApi.Enumerators;
+
+namespace LibraryApi.Models
+{
+    public class Book
+    {
+        public int Id { get; set; } = 10000;
+
+        public string Title { get; set; }
+
+        public string Author { get; set; }
+
+        public GenreEnum Genre { get; set; }
+
+
+    }
+}
