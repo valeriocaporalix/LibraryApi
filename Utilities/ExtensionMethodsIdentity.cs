@@ -6,7 +6,7 @@ namespace LibraryApi.Utilities
     {
         public static int MaxBookIdValue(this IEnumerable<Book> enumerable)
         {
-            int countId = 0;
+            int countId = 10000;
             foreach (var item in enumerable)
             {
                 if (item.Id >= countId)
@@ -19,7 +19,7 @@ namespace LibraryApi.Utilities
 
         public static int MaxCustomerIdValue(this IEnumerable<Customer> enumerable)
         {
-            int countId = 0;
+            int countId = 30000;
             foreach (var item in enumerable)
             {
                 if (item.Id >= countId)
@@ -32,7 +32,7 @@ namespace LibraryApi.Utilities
 
         public static int MaxBorrowIdValue(this IEnumerable<Borrow> enumerable)
         {
-            int countId = 0;
+            int countId = 50000;
             foreach (var item in enumerable)
             {
                 if (item.Id >= countId)

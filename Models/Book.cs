@@ -4,7 +4,7 @@ namespace LibraryApi.Models
 {
     public class Book
     {
-        public int Id { get; set; } = 10000;
+        public int Id { get; set; }
 
         public string Title { get; set; }
 

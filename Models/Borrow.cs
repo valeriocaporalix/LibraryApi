@@ -2,7 +2,7 @@
 {
     public class Borrow
     {
-        public int Id { get; set; } = 50000;
+        public int Id { get; set; }
 
         public int CustomerId { get; set; }
 
