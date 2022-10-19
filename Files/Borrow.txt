@@ -1,1 +1,3 @@
-﻿
+{"Id":50000,"CustomerId":0,"BookId":0,"BorrowStart":"2022-10-19T07:08:20.929Z","BorrowEnd":null}
+{"Id":50001,"CustomerId":0,"BookId":0,"BorrowStart":"2022-10-19T07:09:12.883Z","BorrowEnd":"2022-10-19T07:09:12.883Z"}
+{"Id":50003,"CustomerId":0,"BookId":0,"BorrowStart":"2022-10-19T07:08:20.929Z","BorrowEnd":null}
