@@ -9,6 +9,7 @@ namespace LibraryApi.Services
     public class CustomerService
     {
         private string _filePath = "./Files/Customers.txt";
+        private string _filePathBorrow = "./Files/Borrow.txt";
 
         public void AddCustomer(Customer newCustomer)
         {

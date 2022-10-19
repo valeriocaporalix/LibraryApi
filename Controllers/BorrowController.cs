@@ -34,6 +34,15 @@ namespace LibraryApi.Controllers
             return Ok(borrow);
         }
 
+        [HttpGet("GetBorrowsByCustomer/{customerId}")]
+        public IActionResult GetBorrowsByCustomer(int customerId)
+        {
+            var borrow = _borrowService.GetAllBorrowFromCustomerId(customerId);
+            if (borrow == null )
+                return NotFound();
+            return Ok(borrow);
+        }
+
         [HttpPost()]
         public IActionResult Post([FromBody] Borrow newBorrow)
         {

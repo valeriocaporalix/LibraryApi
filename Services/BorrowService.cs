@@ -32,6 +32,23 @@ namespace LibraryApi.Services
             return borrowActive;
         }
 
+        public IEnumerable<Borrow> GetAllBorrowFromCustomerId(int customerId)
+        {
+            List<Customer> listCustomer = WriterReader.Read<Customer>(_filePathCustomer);
+            List<Borrow> listBorrow = WriterReader.Read<Borrow>(_filePath);
+            var customer = listCustomer.FirstOrDefault(customer => customer.Id == customerId);
+            List<Borrow> borrows = new List<Borrow>();
+            if (customer != null)
+            {
+                borrows = listBorrow.Where(borrow => borrow.CustomerId == customer.Id).ToList();
+            }
+            else
+            {
+                return null;
+            }
+            return borrows;
+        }
+
         public BorrowDetails GetBorrowById(int borrowId)
         {
             List<Borrow> list = WriterReader.Read<Borrow>(_filePath);
