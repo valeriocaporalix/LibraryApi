@@ -28,23 +28,30 @@ namespace LibraryApi.Services
             List<Book> list = WriterReader.Read<Book>(_filePath);
             List<Borrow> borrowList = WriterReader.Read<Borrow>(_filePathBorrow);
             var book = list.FirstOrDefault(book => book.Id == bookId);
-            var borrow = borrowList.FirstOrDefault(borrow => bookId == borrow.BookId);
+            var borrow = new Borrow();
+            
             BookDetails bookDetails = new BookDetails();
             if(book != null)
             {
+                borrow = borrowList.FirstOrDefault(borrow => borrow.BookId == book.Id);
                 bookDetails.Id = book.Id;
                 bookDetails.Title = book.Title;
                 bookDetails.Author = book.Author;
                 bookDetails.Genre = book.Genre;
+                if (borrow != null)
+                {
+                    if (borrow.BorrowEnd == null)
+                    {
+                        bookDetails.ActualBorrow = borrow;
+                    }
+                }
+
+            }
+            else {
+                bookDetails = null;
             }
            
-            if(borrow != null)
-            {
-                if(borrow.BorrowEnd == null)
-                {
-                    bookDetails.ActualBorrow = borrow;
-                }
-            }
+            
             
             return bookDetails;
         }
