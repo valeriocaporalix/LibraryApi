@@ -24,6 +24,14 @@ namespace LibraryApi.Services
             return borrowList;
         }
 
+        public IEnumerable<Borrow> GetAllBorrowActive()
+        {
+            List<Borrow> list = WriterReader.Read<Borrow>(_filePath);
+            var borrowActive = list.Where(borrow => borrow.BorrowEnd == null);
+
+            return borrowActive;
+        }
+
         public BorrowDetails GetBorrowById(int borrowId)
         {
             List<Borrow> list = WriterReader.Read<Borrow>(_filePath);
@@ -103,6 +111,37 @@ namespace LibraryApi.Services
                 borrow.Id = countId;
                 WriterReader.Write(JsonSerializer.Serialize(borrow), _filePath);
                 return borrow;
+            }
+        }
+
+        public Borrow UpdateEndBorrow(int borrowId, DateTime input)
+        {
+            List<Borrow> list = WriterReader.Read<Borrow>(_filePath);
+
+            var borrowToUpdate = list.FirstOrDefault(borrow => borrow.Id == borrowId);
+
+
+            if (borrowToUpdate != null)
+            {
+                File.WriteAllText(_filePath, string.Empty);
+                foreach (Borrow item in list)
+                {
+                    if (item.Id != borrowToUpdate.Id)
+                    {
+                        WriterReader.Write(JsonSerializer.Serialize(item), _filePath);
+                    }
+                    else
+                    {
+                        borrowToUpdate.BorrowEnd = input;
+                        WriterReader.Write(JsonSerializer.Serialize(borrowToUpdate), _filePath);
+                    }
+                }
+
+                return borrowToUpdate;
+            }
+            else
+            {
+                return null;
             }
         }
     }

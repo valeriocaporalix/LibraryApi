@@ -18,6 +18,13 @@ namespace LibraryApi.Controllers
             return Ok(borrowList);
         }
 
+        [HttpGet("activeBorrow")]
+        public IActionResult GetAllActive()
+        {
+            IEnumerable<Borrow> borrowList = _borrowService.GetAllBorrowActive();
+            return Ok(borrowList);
+        }
+
         [HttpGet("{borrowId}")]
         public IActionResult GetDetails(int borrowId)
         {
@@ -48,6 +55,15 @@ namespace LibraryApi.Controllers
             if (borrowToUpdate != null)
                 return Created($"/{borrowId}", borrow);
             return NoContent();
+        }
+
+        [HttpPut("{borrowId}/EndDate/{endDate}")]
+        public IActionResult PutDateTime(int borrowId, DateTime endDate)
+        {
+            var borrowToUpdate = _borrowService.UpdateEndBorrow(borrowId, endDate);
+            if (borrowToUpdate != null)
+                return Created($"/{borrowId}", borrowToUpdate);
+            return NotFound();
         }
     }
 }
