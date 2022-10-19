@@ -1,1 +1,2 @@
-﻿
+{"Id":10000,"Title":"ciao","Author":"string","Genre":0}
+{"Id":10002,"Title":"string","Author":"string","Genre":0}

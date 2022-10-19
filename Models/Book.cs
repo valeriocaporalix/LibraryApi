@@ -12,6 +12,5 @@ namespace LibraryApi.Models
 
         public GenreEnum Genre { get; set; }
 
-
     }
 }
