@@ -30,14 +30,30 @@ namespace LibraryApi.Services
             List<Customer> listCustomer = WriterReader.Read<Customer>(_filePathCustomer);
             List<Book> listBook = WriterReader.Read<Book>(_filePathBook);
             var borrow = list.FirstOrDefault(borrow => borrow.Id == borrowId);
-            var customer = listCustomer.FirstOrDefault(customer => customer.Id == borrow.CustomerId);
-            var book = listBook.FirstOrDefault(book => book.Id == borrow.BookId);
+            var customer = new Customer();
+            var book = new Book();
             BorrowDetails borrowDetails = new BorrowDetails();
-            borrowDetails.Id = borrow.Id;
-            borrowDetails.BorrowStart = borrow.BorrowStart;
-            borrowDetails.BorrowEnd = borrow.BorrowEnd;
-            borrowDetails.Customer = customer;
-            borrowDetails.Book = book;
+            if (borrow != null)
+            {
+                borrowDetails.Id = borrow.Id;
+                borrowDetails.BorrowStart = borrow.BorrowStart;
+                borrowDetails.BorrowEnd = borrow.BorrowEnd;
+                customer = listCustomer.FirstOrDefault(customer => customer.Id == borrow.CustomerId);
+                book = listBook.FirstOrDefault(book => book.Id == borrow.BookId);
+                if(book != null)
+                {
+                    borrowDetails.Book = book;
+                }
+                if(customer != null)
+                {
+                    borrowDetails.Customer = customer;
+                }
+            }
+            else
+            {
+                borrowDetails = null;
+            }
+            
             return borrowDetails;
         }
 

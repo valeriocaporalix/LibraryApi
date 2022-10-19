@@ -22,7 +22,7 @@ namespace LibraryApi.Controllers
         [HttpGet("{bookId}")]
         public IActionResult GetDetails(int bookId)
         {
-            Book book = _bookService.GetBookById(bookId);
+            BookDetails book = _bookService.GetBookById(bookId);
             if (book == null)
                 return NotFound();
             return Ok(book);

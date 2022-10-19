@@ -7,6 +7,7 @@ namespace LibraryApi.Services
     public class BookService
     {
         private string _filePath = "./Files/Books.txt";
+        private string _filePathBorrow = "./Files/Borrow.txt";
 
         public void AddBook(Book newBook)
         {
@@ -22,11 +23,30 @@ namespace LibraryApi.Services
             return bookList;
         }
 
-        public Book GetBookById(int bookId)
+        public BookDetails GetBookById(int bookId)
         {
             List<Book> list = WriterReader.Read<Book>(_filePath);
+            List<Borrow> borrowList = WriterReader.Read<Borrow>(_filePathBorrow);
             var book = list.FirstOrDefault(book => book.Id == bookId);
-            return book;
+            var borrow = borrowList.FirstOrDefault(borrow => bookId == borrow.BookId);
+            BookDetails bookDetails = new BookDetails();
+            if(book != null)
+            {
+                bookDetails.Id = book.Id;
+                bookDetails.Title = book.Title;
+                bookDetails.Author = book.Author;
+                bookDetails.Genre = book.Genre;
+            }
+           
+            if(borrow != null)
+            {
+                if(borrow.BorrowEnd == null)
+                {
+                    bookDetails.ActualBorrow = borrow;
+                }
+            }
+            
+            return bookDetails;
         }
 
         public void DeleteBook(int bookId)
