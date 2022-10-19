@@ -21,7 +21,7 @@ namespace LibraryApi.Controllers
         [HttpGet("{borrowId}")]
         public IActionResult GetDetails(int borrowId)
         {
-            Borrow borrow = _borrowService.GetBorrowById(borrowId);
+            BorrowDetails borrow = _borrowService.GetBorrowById(borrowId);
             if (borrow == null)
                 return NotFound();
             return Ok(borrow);
