@@ -1,4 +1,6 @@
-﻿using LibraryApi.Models;
+﻿using LibraryApi.Models.Books;
+using LibraryApi.Models.Borrows;
+using LibraryApi.Models.Customers;
 
 namespace LibraryApi.Utilities
 {

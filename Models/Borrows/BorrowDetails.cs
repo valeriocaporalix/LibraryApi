@@ -1,4 +1,7 @@
-﻿namespace LibraryApi.Models
+﻿using LibraryApi.Models.Books;
+using LibraryApi.Models.Customers;
+
+namespace LibraryApi.Models.Borrows
 {
     public class BorrowDetails
     {

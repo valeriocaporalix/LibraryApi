@@ -1,6 +1,6 @@
 ﻿using LibraryApi.Enumerators;
 
-namespace LibraryApi.Models
+namespace LibraryApi.Models.Books
 {
     public class Book
     {

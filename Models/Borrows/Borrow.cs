@@ -1,4 +1,4 @@
-﻿namespace LibraryApi.Models
+﻿namespace LibraryApi.Models.Borrows
 {
     public class Borrow
     {
@@ -11,6 +11,6 @@
         public DateTime BorrowStart { get; set; }
 
         public DateTime? BorrowEnd { get; set; } = null;
-        
+
     }
 }

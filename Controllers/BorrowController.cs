@@ -1,4 +1,4 @@
-﻿using LibraryApi.Models;
+﻿using LibraryApi.Models.Borrows;
 using LibraryApi.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -37,16 +37,34 @@ namespace LibraryApi.Controllers
         [HttpGet("GetBorrowsByCustomer/{customerId}")]
         public IActionResult GetBorrowsByCustomer(int customerId)
         {
-            var borrow = _borrowService.GetAllBorrowFromCustomerId(customerId);
+            var borrow = _borrowService.GetAllBorrowByCustomerId(customerId);
             if (borrow == null )
                 return NotFound();
             return Ok(borrow);
         }
 
+        [HttpGet("GetBorrowsByBook/{bookId}")]
+        public IActionResult GetBorrowsByBook(int bookId)
+        {
+            var borrow = _borrowService.GetAllBorrowByBookId(bookId);
+            if (borrow == null)
+                return NotFound();
+            return Ok(borrow);
+        }
+
+        [HttpGet("GetBorrowsDate/{start}/{end}")]
+        public IActionResult GetBorrowsDate(DateTime start, DateTime end)
+        {
+            var borrows = _borrowService.GetAllBorrowInRange(start, end);
+            return Ok(borrows);
+        }
+
         [HttpPost()]
         public IActionResult Post([FromBody] Borrow newBorrow)
         {
-            _borrowService.AddBorrow(newBorrow);
+            var borrowToAdd = _borrowService.AddBorrow(newBorrow);
+            if(borrowToAdd == null)
+                return BadRequest();
             return Created($"/{newBorrow.Id}", newBorrow);
         }
 

@@ -1,4 +1,6 @@
 ﻿using LibraryApi.Models;
+using LibraryApi.Models.Books;
+using LibraryApi.Models.Borrows;
 using LibraryApi.Utilities;
 using System.Text.Json;
 
@@ -54,6 +56,132 @@ namespace LibraryApi.Services
             
             
             return bookDetails;
+        }
+
+        public BooksMostAndLessBorrow GetBookMostAndLessBorrowed()
+        {
+            List<Book> listBook = WriterReader.Read<Book>(_filePath);
+            List<Borrow> listBorrow = WriterReader.Read<Borrow>(_filePathBorrow);
+            var listMostBorrowed = new List<Book>();
+            var listLessBorrowed = new List<Book>();
+            List<BookIdQuantityBorrow> listBooksAndQty = new List<BookIdQuantityBorrow>();
+            foreach (var book in listBook)
+            {
+                var newBookRecord = new BookIdQuantityBorrow(book.Id, 0);
+                listBooksAndQty.Add(newBookRecord);
+            }
+            foreach (var borrow in listBorrow)
+            {
+                foreach (var bookAndQty in listBooksAndQty)
+                {
+                    if (borrow.BookId == bookAndQty.Id)
+                    {
+                        bookAndQty.Quantity++;
+                    }
+                }
+            }
+
+            List<BookIdQuantityBorrow> orderedList = listBooksAndQty.OrderBy(record => record.Quantity).ToList();
+            BookIdQuantityBorrow lessQty = orderedList[0];
+            BookIdQuantityBorrow mostQty = orderedList[orderedList.Count() -1];
+            int mostQtyItem = mostQty.Quantity;
+            int LessQtyItem = lessQty.Quantity;
+            List<BookIdQuantityBorrow> listLessQty = new List<BookIdQuantityBorrow>();
+            List<BookIdQuantityBorrow> listMostQty = new List<BookIdQuantityBorrow>();
+
+            foreach(var record in orderedList)
+            {
+                if(record.Quantity == mostQty.Quantity)
+                {
+                    listMostQty.Add(record);
+                }
+                if (record.Quantity == lessQty.Quantity)
+                {
+                    listLessQty.Add(record);
+                }
+
+            }
+            var listLessSelected = listLessQty.Select(item => item.Id);
+            var listMostSelected = listMostQty.Select(item => item.Id);
+            List<Book> listToAddForMost = new List<Book>();
+            List<Book> listToAddForLess = new List<Book>();
+            foreach(var book in listBook)
+            {
+                foreach(var record in listMostSelected)
+                {
+                    if (book.Id == record)
+                    {
+                        listToAddForMost.Add(book);
+                    }
+                }
+                foreach (var record in listLessSelected)
+                {
+                    if (book.Id == record)
+                    {
+                        listToAddForLess.Add(book);
+                    }
+                }
+            }
+
+            BooksMostAndLessBorrow objectToReturn = new BooksMostAndLessBorrow(mostQtyItem, 
+                                                                                listToAddForMost, 
+                                                                                LessQtyItem, 
+                                                                                listToAddForLess);
+
+            return objectToReturn;
+
+        }
+
+        public List<Book> GetMostBorrowedBooks()
+        {
+            List<Book> listBook = WriterReader.Read<Book>(_filePath);
+            List<Borrow> listBorrow = WriterReader.Read<Borrow>(_filePathBorrow);
+            var listMostBorrowed = new List<Book>();
+            List<BookIdQuantityBorrow> listBooksAndQty = new List<BookIdQuantityBorrow>();
+            foreach (var book in listBook)
+            {
+                var newBookRecord = new BookIdQuantityBorrow(book.Id, 0);
+                listBooksAndQty.Add(newBookRecord);
+            }
+            foreach (var borrow in listBorrow)
+            {
+                foreach (var bookAndQty in listBooksAndQty)
+                {
+                    if (borrow.BookId == bookAndQty.Id)
+                    {
+                        bookAndQty.Quantity++;
+                    }
+                }
+            }
+
+            List<BookIdQuantityBorrow> orderedList = listBooksAndQty.OrderBy(record => record.Quantity).ToList();
+            BookIdQuantityBorrow mostQty = orderedList[orderedList.Count() - 1];
+            int mostQtyItem = mostQty.Quantity;
+            List<BookIdQuantityBorrow> listMostQty = new List<BookIdQuantityBorrow>();
+
+            foreach (var record in orderedList)
+            {
+                if (record.Quantity == mostQty.Quantity)
+                {
+                    listMostQty.Add(record);
+                }
+
+            }
+            var listMostSelected = listMostQty.Select(item => item.Id);
+            List<Book> listToAddForMost = new List<Book>();
+            foreach (var book in listBook)
+            {
+                foreach (var record in listMostSelected)
+                {
+                    if (book.Id == record)
+                    {
+                        listToAddForMost.Add(book);
+                    }
+                }
+            }
+
+
+            return listToAddForMost;
         }
 
         public void DeleteBook(int bookId)

@@ -1,6 +1,7 @@
 ﻿using LibraryApi.Enumerators;
+using LibraryApi.Models.Borrows;
 
-namespace LibraryApi.Models
+namespace LibraryApi.Models.Books
 {
     public class BookDetails
     {

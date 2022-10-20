@@ -1,2 +1,10 @@
-{"Id":10000,"Title":"ciao","Author":"string","Genre":0}
-{"Id":10002,"Title":"string","Author":"string","Genre":0}
+{"Id":10000,"Title":"La Settima Porta","Author":"Giordan Kamuccia","Genre":3}
+{"Id":10001,"Title":"La Porta Del Monte Monaco","Author":"Giordan Kamuccia","Genre":3}
+{"Id":10002,"Title":"Ho Novanta Figli","Author":"Giordan Kamuccia","Genre":1}
+{"Id":10003,"Title":"La Strada dei Sentieri","Author":"Amerigo Rossi","Genre":2}
+{"Id":10004,"Title":"Cuore o Mente","Author":"Pietro Bevilacqua","Genre":2}
+{"Id":10005,"Title":"Mai e poi mai","Author":"Pietro Angelucci","Genre":4}
+{"Id":10006,"Title":"Ho Sentito Cose Strane","Author":"Antonio Filippini","Genre":0}
+{"Id":10007,"Title":"Ho sete mamma!","Author":"Antonio Filippini","Genre":5}
+{"Id":10008,"Title":"Gli Occhi Della Formica","Author":"Andrea Cataldi","Genre":5}
+{"Id":10009,"Title":"Gli Angeli Dell\u0027Inferno","Author":"Mario Micol","Genre":5}

@@ -1,10 +1,10 @@
 ﻿using LibraryApi.Services;
 using Microsoft.AspNetCore.Mvc;
-using LibraryApi.Models;
 using System.Diagnostics.Metrics;
 using System.Reflection.PortableExecutable;
 using System.Text.Json;
 using System.Net;
+using LibraryApi.Models.Customers;
 
 namespace LibraryApi.Controllers
 {
@@ -13,6 +13,7 @@ namespace LibraryApi.Controllers
     public class CustomerController : Controller
     {
         private CustomerService _customerService = new CustomerService();
+        private BorrowService _borrowService = new BorrowService();
 
         [HttpGet()]
         public IActionResult GetAll()
@@ -28,6 +29,24 @@ namespace LibraryApi.Controllers
             if (customer == null)
                 return NotFound();
             return Ok(customer);
+        }
+
+        [HttpGet("GetBorrowsByCustomer/{customerId}")]
+        public IActionResult GetBorrowsByCustomer(int customerId)
+        {
+            var borrow = _borrowService.GetAllBorrowByCustomerId(customerId);
+            if (borrow == null)
+                return NotFound();
+            return Ok(borrow);
+        }
+
+        [HttpGet("GetCustomersWithMostBorrows")]
+        public IActionResult GetCustomersWithMostBorrows()
+        {
+            List<Customer> customers = _customerService.GetMostCustomerWithBorrow();
+            if (customers == null)
+                return NotFound();
+            return Ok(customers);
         }
 
         [HttpPost()]

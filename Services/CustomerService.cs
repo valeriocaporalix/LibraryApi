@@ -1,4 +1,7 @@
 ﻿using LibraryApi.Models;
+using LibraryApi.Models.Books;
+using LibraryApi.Models.Borrows;
+using LibraryApi.Models.Customers;
 using LibraryApi.Utilities;
 using System.Diagnostics.Metrics;
 using System.Reflection.PortableExecutable;
@@ -30,6 +33,58 @@ namespace LibraryApi.Services
             List<Customer> list = WriterReader.Read<Customer>(_filePath);
             var customer = list.FirstOrDefault(customer => customer.Id == customerId);
             return customer;
+        }
+
+        public List<Customer> GetMostCustomerWithBorrow()
+        {
+            List<Customer> listCustomer = WriterReader.Read<Customer>(_filePath);
+            List<Borrow> listBorrow = WriterReader.Read<Borrow>(_filePathBorrow);
+            var listMostBorrowed = new List<Book>();
+            List<CustomerIdQuantityBorrow> listCustomersAndQty = new List<CustomerIdQuantityBorrow>();
+            foreach (var customer in listCustomer)
+            {
+                var newCustomerRecord = new CustomerIdQuantityBorrow(customer.Id, 0);
+                listCustomersAndQty.Add(newCustomerRecord);
+            }
+            foreach (var borrow in listBorrow)
+            {
+                foreach (var customerAndQty in listCustomersAndQty)
+                {
+                    if (borrow.CustomerId == customerAndQty.Id)
+                    {
+                        customerAndQty.Quantity++;
+                    }
+                }
+            }
+
+            List<CustomerIdQuantityBorrow> orderedList = listCustomersAndQty.OrderBy(record => record.Quantity).ToList();
+            CustomerIdQuantityBorrow mostQty = orderedList[orderedList.Count() - 1];
+            int mostQtyItem = mostQty.Quantity;
+            List<CustomerIdQuantityBorrow> listMostQty = new List<CustomerIdQuantityBorrow>();
+
+            foreach (var record in orderedList)
+            {
+                if (record.Quantity == mostQty.Quantity)
+                {
+                    listMostQty.Add(record);
+                }
+
+            }
+            var listMostSelected = listMostQty.Select(item => item.Id);
+            List<Customer> listToAddForMost = new List<Customer>();
+            foreach (var customer in listCustomer)
+            {
+                foreach (var record in listMostSelected)
+                {
+                    if (customer.Id == record)
+                    {
+                        listToAddForMost.Add(customer);
+                    }
+                }
+            }
+
+
+            return listToAddForMost;
         }
 
         public void DeleteCustomer(int customerId)

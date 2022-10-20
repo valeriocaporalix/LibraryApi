@@ -1,4 +1,13 @@
-{"Id":50000,"CustomerId":0,"BookId":0,"BorrowStart":"2022-10-19T07:08:20.929Z","BorrowEnd":null}
-{"Id":50001,"CustomerId":0,"BookId":0,"BorrowStart":"2022-10-19T07:09:12.883Z","BorrowEnd":"2022-10-19T07:09:12.883Z"}
-{"Id":50003,"CustomerId":0,"BookId":0,"BorrowStart":"2022-10-19T07:08:20.929Z","BorrowEnd":"2022-10-19T07:08:20.929Z"}
-{"Id":50004,"CustomerId":30000,"BookId":10000,"BorrowStart":"2022-10-19T07:25:28.94Z","BorrowEnd":null}
+{"Id":50000,"CustomerId":30000,"BookId":10000,"BorrowStart":"2022-08-19T00:00:00","BorrowEnd":"2022-10-19T00:00:00"}
+{"Id":50001,"CustomerId":30000,"BookId":10001,"BorrowStart":"2022-08-19T00:00:00","BorrowEnd":"2022-10-19T00:00:00"}
+{"Id":50002,"CustomerId":30001,"BookId":10000,"BorrowStart":"2022-08-19T00:00:00","BorrowEnd":null}
+{"Id":50003,"CustomerId":30002,"BookId":10001,"BorrowStart":"2022-07-19T00:00:00","BorrowEnd":"2022-09-19T00:00:00"}
+{"Id":50004,"CustomerId":30003,"BookId":10005,"BorrowStart":"2022-07-19T00:00:00","BorrowEnd":"2022-09-19T00:00:00"}
+{"Id":50005,"CustomerId":30003,"BookId":10004,"BorrowStart":"2022-05-19T00:00:00","BorrowEnd":"2022-09-19T00:00:00"}
+{"Id":50006,"CustomerId":30003,"BookId":10003,"BorrowStart":"2022-05-19T00:00:00","BorrowEnd":"2022-09-19T00:00:00"}
+{"Id":50007,"CustomerId":30002,"BookId":10003,"BorrowStart":"2022-05-19T00:00:00","BorrowEnd":"2022-08-19T00:00:00"}
+{"Id":50008,"CustomerId":30002,"BookId":10005,"BorrowStart":"2022-05-19T00:00:00","BorrowEnd":"2022-08-19T00:00:00"}
+{"Id":50009,"CustomerId":30004,"BookId":10006,"BorrowStart":"2022-05-19T00:00:00","BorrowEnd":"2022-08-19T00:00:00"}
+{"Id":50010,"CustomerId":30004,"BookId":10007,"BorrowStart":"2022-05-19T00:00:00","BorrowEnd":null}
+{"Id":50011,"CustomerId":30001,"BookId":10008,"BorrowStart":"2022-05-19T00:00:00","BorrowEnd":null}
+{"Id":50012,"CustomerId":30001,"BookId":10009,"BorrowStart":"2022-02-19T00:00:00","BorrowEnd":null}

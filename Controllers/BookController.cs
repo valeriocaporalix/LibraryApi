@@ -1,4 +1,4 @@
-﻿using LibraryApi.Models;
+﻿using LibraryApi.Models.Books;
 using LibraryApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -27,6 +27,25 @@ namespace LibraryApi.Controllers
                 return NotFound();
             return Ok(book);
         }
+
+        [HttpGet("GetMostBorrowed")]
+        public IActionResult GetFilteredByMostBorrow()
+        {
+            List<Book> records = _bookService.GetMostBorrowedBooks();
+            if (records == null)
+                return NotFound();
+            return Ok(records);
+        }
+
+        [HttpGet("GetMostAndLessBorrowed")]
+        public IActionResult GetFilteredByBorrows()
+        {
+            BooksMostAndLessBorrow records = _bookService.GetBookMostAndLessBorrowed();
+            if (records == null)
+                return NotFound();
+            return Ok(records);
+        }
+
 
         [HttpPost()]
         public IActionResult Post([FromBody] Book newBook)

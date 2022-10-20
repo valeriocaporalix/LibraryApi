@@ -1,4 +1,4 @@
-﻿namespace LibraryApi.Models
+﻿namespace LibraryApi.Models.Customers
 {
     public class Customer
     {
