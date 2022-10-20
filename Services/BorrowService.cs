@@ -2,20 +2,28 @@
 using LibraryApi.Models.Books;
 using LibraryApi.Models.Borrows;
 using LibraryApi.Models.Customers;
+using LibraryApi.Services.Interfaces;
 using LibraryApi.Utilities;
 using System.Text.Json;
 
 namespace LibraryApi.Services
 {
-    public class BorrowService
+    public class BorrowService : IBorrowService
     {
         private string _filePath = "./Files/Borrow.txt";
         private string _filePathBook = "./Files/Books.txt";
         private string _filePathCustomer = "./Files/Customers.txt";
+        private IWriterReader _dal;
+
+        public BorrowService(IWriterReader dal)
+        {
+            _dal = dal;
+        }
+
 
         public Borrow AddBorrow(Borrow newBorrow)
         {
-            List<Borrow> list = WriterReader.Read<Borrow>(_filePath);
+            List<Borrow> list = _dal.Read<Borrow>(_filePath);
             int countId = ExtensionMethodIdentityId.MaxBorrowIdValue(list);
             var listBorrowNotAvailable = list.Where(borrow => borrow.BorrowEnd == null);
             foreach (var borrow in listBorrowNotAvailable)
@@ -26,19 +34,19 @@ namespace LibraryApi.Services
                 }
             }
             newBorrow.Id = countId;
-            WriterReader.Write(JsonSerializer.Serialize(newBorrow), _filePath);
+            _dal.Write(JsonSerializer.Serialize(newBorrow), _filePath);
             return newBorrow;
         }
 
         public IEnumerable<Borrow> GetAllBorrow()
         {
-            var borrowList = WriterReader.Read<Borrow>(_filePath);
+            var borrowList = _dal.Read<Borrow>(_filePath);
             return borrowList;
         }
 
         public IEnumerable<Borrow> GetAllBorrowActive()
         {
-            List<Borrow> list = WriterReader.Read<Borrow>(_filePath);
+            List<Borrow> list = _dal.Read<Borrow>(_filePath);
             var borrowActive = list.Where(borrow => borrow.BorrowEnd == null);
 
             return borrowActive;
@@ -46,8 +54,8 @@ namespace LibraryApi.Services
 
         public IEnumerable<Borrow> GetAllBorrowByCustomerId(int customerId)
         {
-            List<Customer> listCustomer = WriterReader.Read<Customer>(_filePathCustomer);
-            List<Borrow> listBorrow = WriterReader.Read<Borrow>(_filePath);
+            List<Customer> listCustomer = _dal.Read<Customer>(_filePathCustomer);
+            List<Borrow> listBorrow = _dal.Read<Borrow>(_filePath);
             var customer = listCustomer.FirstOrDefault(customer => customer.Id == customerId);
             List<Borrow> borrows = new List<Borrow>();
             if (customer != null)
@@ -63,8 +71,8 @@ namespace LibraryApi.Services
 
         public IEnumerable<Borrow> GetAllBorrowByBookId(int bookId)
         {
-            List<Book> listBook = WriterReader.Read<Book>(_filePathBook);
-            List<Borrow> listBorrow = WriterReader.Read<Borrow>(_filePath);
+            List<Book> listBook = _dal.Read<Book>(_filePathBook);
+            List<Borrow> listBorrow = _dal.Read<Borrow>(_filePath);
             var book = listBook.FirstOrDefault(book => book.Id == bookId);
             List<Borrow> borrows = new List<Borrow>();
             if (book != null)
@@ -80,9 +88,9 @@ namespace LibraryApi.Services
 
         public BorrowDetails GetBorrowById(int borrowId)
         {
-            List<Borrow> list = WriterReader.Read<Borrow>(_filePath);
-            List<Customer> listCustomer = WriterReader.Read<Customer>(_filePathCustomer);
-            List<Book> listBook = WriterReader.Read<Book>(_filePathBook);
+            List<Borrow> list = _dal.Read<Borrow>(_filePath);
+            List<Customer> listCustomer = _dal.Read<Customer>(_filePathCustomer);
+            List<Book> listBook = _dal.Read<Book>(_filePathBook);
             var borrow = list.FirstOrDefault(borrow => borrow.Id == borrowId);
             var customer = new Customer();
             var book = new Book();
@@ -113,7 +121,7 @@ namespace LibraryApi.Services
 
         public IEnumerable<Borrow> GetAllBorrowInRange(DateTime startDate, DateTime endDate)
         {
-            List<Borrow> borrowList = WriterReader.Read<Borrow>(_filePath);
+            List<Borrow> borrowList = _dal.Read<Borrow>(_filePath);
             List<Borrow> newListToReturn = new List<Borrow>();
             foreach (var borrow in borrowList)
             {
@@ -127,21 +135,21 @@ namespace LibraryApi.Services
 
         public void DeleteBorrow(int borrowId)
         {
-            List<Borrow> borrowList = WriterReader.Read<Borrow>(_filePath);
+            List<Borrow> borrowList = _dal.Read<Borrow>(_filePath);
             File.WriteAllText(_filePath, string.Empty);
 
             foreach (Borrow item in borrowList)
             {
                 if (item.Id != borrowId)
                 {
-                    WriterReader.Write(JsonSerializer.Serialize(item), _filePath);
+                    _dal.Write(JsonSerializer.Serialize(item), _filePath);
                 }
             }
         }
 
         public Borrow UpdateBorrow(int borrowId, Borrow borrow)
         {
-            List<Borrow> list = WriterReader.Read<Borrow>(_filePath);
+            List<Borrow> list = _dal.Read<Borrow>(_filePath);
 
             int countId = list.MaxBorrowIdValue();
 
@@ -155,12 +163,12 @@ namespace LibraryApi.Services
                 {
                     if (item.Id != borrowToUpdate.Id)
                     {
-                        WriterReader.Write(JsonSerializer.Serialize(item), _filePath);
+                        _dal.Write(JsonSerializer.Serialize(item), _filePath);
                     }
                     else
                     {
                         borrow.Id = borrowToUpdate.Id;
-                        WriterReader.Write(JsonSerializer.Serialize(borrow), _filePath);
+                        _dal.Write(JsonSerializer.Serialize(borrow), _filePath);
                     }
                 }
 
@@ -169,14 +177,14 @@ namespace LibraryApi.Services
             else
             {
                 borrow.Id = countId;
-                WriterReader.Write(JsonSerializer.Serialize(borrow), _filePath);
+                _dal.Write(JsonSerializer.Serialize(borrow), _filePath);
                 return borrow;
             }
         }
 
         public Borrow UpdateEndBorrow(int borrowId, DateTime input)
         {
-            List<Borrow> list = WriterReader.Read<Borrow>(_filePath);
+            List<Borrow> list = _dal.Read<Borrow>(_filePath);
 
             var borrowToUpdate = list.FirstOrDefault(borrow => borrow.Id == borrowId);
 
@@ -188,12 +196,12 @@ namespace LibraryApi.Services
                 {
                     if (item.Id != borrowToUpdate.Id)
                     {
-                        WriterReader.Write(JsonSerializer.Serialize(item), _filePath);
+                        _dal.Write(JsonSerializer.Serialize(item), _filePath);
                     }
                     else
                     {
                         borrowToUpdate.BorrowEnd = input;
-                        WriterReader.Write(JsonSerializer.Serialize(borrowToUpdate), _filePath);
+                        _dal.Write(JsonSerializer.Serialize(borrowToUpdate), _filePath);
                     }
                 }
 

@@ -5,6 +5,7 @@ using System.Reflection.PortableExecutable;
 using System.Text.Json;
 using System.Net;
 using LibraryApi.Models.Customers;
+using LibraryApi.Services.Interfaces;
 
 namespace LibraryApi.Controllers
 {
@@ -12,8 +13,14 @@ namespace LibraryApi.Controllers
     [ApiController]
     public class CustomerController : Controller
     {
-        private CustomerService _customerService = new CustomerService();
-        private BorrowService _borrowService = new BorrowService();
+        private ICustomerService _customerService;
+        private IBorrowService _borrowService;
+
+        public CustomerController (ICustomerService customerService, IBorrowService borrowService)
+        {
+            _customerService = customerService;
+            _borrowService = borrowService;
+        }
 
         [HttpGet()]
         public IActionResult GetAll()
@@ -31,7 +38,7 @@ namespace LibraryApi.Controllers
             return Ok(customer);
         }
 
-        [HttpGet("GetBorrowsByCustomer/{customerId}")]
+        [HttpGet("{customerId}/borrow")]
         public IActionResult GetBorrowsByCustomer(int customerId)
         {
             var borrow = _borrowService.GetAllBorrowByCustomerId(customerId);
@@ -40,7 +47,7 @@ namespace LibraryApi.Controllers
             return Ok(borrow);
         }
 
-        [HttpGet("GetCustomersWithMostBorrows")]
+        [HttpGet("mostborrow/customers")]
         public IActionResult GetCustomersWithMostBorrows()
         {
             List<Customer> customers = _customerService.GetMostCustomerWithBorrow();

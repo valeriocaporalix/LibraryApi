@@ -1,34 +1,42 @@
 ﻿using LibraryApi.Models;
 using LibraryApi.Models.Books;
 using LibraryApi.Models.Borrows;
+using LibraryApi.Services.Interfaces;
 using LibraryApi.Utilities;
 using System.Text.Json;
 
 namespace LibraryApi.Services
 {
-    public class BookService
+    public class BookService : IBookService
     {
         private string _filePath = "./Files/Books.txt";
         private string _filePathBorrow = "./Files/Borrow.txt";
+        private IWriterReader _dal;
+
+        public BookService(IWriterReader dal)
+        {
+            _dal = dal;
+        }
+
 
         public void AddBook(Book newBook)
         {
-            List<Book> list = WriterReader.Read<Book>(_filePath);
+            List<Book> list = _dal.Read<Book>(_filePath);
             int countId = ExtensionMethodIdentityId.MaxBookIdValue(list);
             newBook.Id = countId;
-            WriterReader.Write(JsonSerializer.Serialize(newBook), _filePath);
+            _dal.Write(JsonSerializer.Serialize(newBook), _filePath);
         }
 
         public IEnumerable<Book> GetAllBooks()
         {
-            var bookList = WriterReader.Read<Book>(_filePath);
+            var bookList = _dal.Read<Book>(_filePath);
             return bookList;
         }
 
         public BookDetails GetBookById(int bookId)
         {
-            List<Book> list = WriterReader.Read<Book>(_filePath);
-            List<Borrow> borrowList = WriterReader.Read<Borrow>(_filePathBorrow);
+            List<Book> list = _dal.Read<Book>(_filePath);
+            List<Borrow> borrowList = _dal.Read<Borrow>(_filePathBorrow);
             var book = list.FirstOrDefault(book => book.Id == bookId);
             var borrow = new Borrow();
             
@@ -60,8 +68,8 @@ namespace LibraryApi.Services
 
         public BooksMostAndLessBorrow GetBookMostAndLessBorrowed()
         {
-            List<Book> listBook = WriterReader.Read<Book>(_filePath);
-            List<Borrow> listBorrow = WriterReader.Read<Borrow>(_filePathBorrow);
+            List<Book> listBook = _dal.Read<Book>(_filePath);
+            List<Borrow> listBorrow = _dal.Read<Borrow>(_filePathBorrow);
             var listMostBorrowed = new List<Book>();
             var listLessBorrowed = new List<Book>();
             List<BookIdQuantityBorrow> listBooksAndQty = new List<BookIdQuantityBorrow>();
@@ -134,8 +142,8 @@ namespace LibraryApi.Services
 
         public List<Book> GetMostBorrowedBooks()
         {
-            List<Book> listBook = WriterReader.Read<Book>(_filePath);
-            List<Borrow> listBorrow = WriterReader.Read<Borrow>(_filePathBorrow);
+            List<Book> listBook = _dal.Read<Book>(_filePath);
+            List<Borrow> listBorrow = _dal.Read<Borrow>(_filePathBorrow);
             var listMostBorrowed = new List<Book>();
             List<BookIdQuantityBorrow> listBooksAndQty = new List<BookIdQuantityBorrow>();
             foreach (var book in listBook)
@@ -186,21 +194,21 @@ namespace LibraryApi.Services
 
         public void DeleteBook(int bookId)
         {
-            List<Book> bookList = WriterReader.Read<Book>(_filePath);
+            List<Book> bookList = _dal.Read<Book>(_filePath);
             File.WriteAllText(_filePath, string.Empty);
 
             foreach (Book item in bookList)
             {
                 if (item.Id != bookId)
                 {
-                    WriterReader.Write(JsonSerializer.Serialize(item), _filePath);
+                    _dal.Write(JsonSerializer.Serialize(item), _filePath);
                 }
             }
         }
 
         public Book UpdateBook(int bookId, Book book)
         {
-            List<Book> list = WriterReader.Read<Book>(_filePath);
+            List<Book> list = _dal.Read<Book>(_filePath);
 
             int countId = list.MaxBookIdValue();
 
@@ -214,12 +222,12 @@ namespace LibraryApi.Services
                 {
                     if (item.Id != bookToUpdate.Id)
                     {
-                        WriterReader.Write(JsonSerializer.Serialize(item), _filePath);
+                        _dal.Write(JsonSerializer.Serialize(item), _filePath);
                     }
                     else
                     {
                         book.Id = bookToUpdate.Id;
-                        WriterReader.Write(JsonSerializer.Serialize(book), _filePath);
+                        _dal.Write(JsonSerializer.Serialize(book), _filePath);
                     }
                 }
 
@@ -228,7 +236,7 @@ namespace LibraryApi.Services
             else
             {
                 book.Id = countId;
-                WriterReader.Write(JsonSerializer.Serialize(book), _filePath);
+                _dal.Write(JsonSerializer.Serialize(book), _filePath);
                 return book;
             }
         }

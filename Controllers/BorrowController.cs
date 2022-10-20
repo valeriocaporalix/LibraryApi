@@ -1,5 +1,6 @@
 ﻿using LibraryApi.Models.Borrows;
 using LibraryApi.Services;
+using LibraryApi.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryApi.Controllers
@@ -8,17 +9,24 @@ namespace LibraryApi.Controllers
     [ApiController]
     public class BorrowController : Controller
     {
-        
-        private BorrowService _borrowService = new BorrowService();
+
+        private IBorrowService _borrowService;
+
+        public BorrowController(IBorrowService borrowService)
+        {
+            _borrowService = borrowService;
+        }
 
         [HttpGet()]
         public IActionResult GetAll()
         {
-            IEnumerable<Borrow> borrowList = _borrowService.GetAllBorrow();
+            IEnumerable<Borrow> borrowList = _borrowService.
+                
+                GetAllBorrow();
             return Ok(borrowList);
         }
 
-        [HttpGet("activeBorrow")]
+        [HttpGet("active")]
         public IActionResult GetAllActive()
         {
             IEnumerable<Borrow> borrowList = _borrowService.GetAllBorrowActive();
@@ -34,7 +42,7 @@ namespace LibraryApi.Controllers
             return Ok(borrow);
         }
 
-        [HttpGet("GetBorrowsByCustomer/{customerId}")]
+        [HttpGet("Customer/{customerId}/borrows")]
         public IActionResult GetBorrowsByCustomer(int customerId)
         {
             var borrow = _borrowService.GetAllBorrowByCustomerId(customerId);
@@ -43,7 +51,7 @@ namespace LibraryApi.Controllers
             return Ok(borrow);
         }
 
-        [HttpGet("GetBorrowsByBook/{bookId}")]
+        [HttpGet("book/{bookId}/borrows")]
         public IActionResult GetBorrowsByBook(int bookId)
         {
             var borrow = _borrowService.GetAllBorrowByBookId(bookId);
@@ -52,7 +60,7 @@ namespace LibraryApi.Controllers
             return Ok(borrow);
         }
 
-        [HttpGet("GetBorrowsDate/{start}/{end}")]
+        [HttpGet("range/{start}/{end}/borrow")]
         public IActionResult GetBorrowsDate(DateTime start, DateTime end)
         {
             var borrows = _borrowService.GetAllBorrowInRange(start, end);

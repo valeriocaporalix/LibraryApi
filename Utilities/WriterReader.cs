@@ -1,10 +1,11 @@
-﻿using System.Text.Json;
+﻿using LibraryApi.Utilities;
+using System.Text.Json;
 
 namespace LibraryApi.Models
 {
-    public static class WriterReader
+    public class WriterReader : IWriterReader
     {
-        public static void Write(string inputText, string filePath)
+        public void Write(string inputText, string filePath)
         {
             using (var streamWriter = File.AppendText(filePath))
             {
@@ -13,7 +14,7 @@ namespace LibraryApi.Models
         }
 
 
-        public static List<T> Read<T>(string filePath)
+        public List<T> Read<T>(string filePath)
         {
             List<T> list = new List<T>();
             using var streamReader = new StreamReader(filePath);

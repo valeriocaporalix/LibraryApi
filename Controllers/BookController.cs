@@ -1,5 +1,6 @@
 ﻿using LibraryApi.Models.Books;
 using LibraryApi.Services;
+using LibraryApi.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -9,8 +10,12 @@ namespace LibraryApi.Controllers
     [ApiController]
     public class BookController : Controller
     {
-        private BookService _bookService =new BookService();
+        private IBookService _bookService;
 
+        public BookController(IBookService bookService)
+        {
+            _bookService = bookService;
+        }
 
         [HttpGet()]
         public IActionResult GetAll()
@@ -28,7 +33,7 @@ namespace LibraryApi.Controllers
             return Ok(book);
         }
 
-        [HttpGet("GetMostBorrowed")]
+        [HttpGet("mostborrow/books")]
         public IActionResult GetFilteredByMostBorrow()
         {
             List<Book> records = _bookService.GetMostBorrowedBooks();
@@ -37,8 +42,8 @@ namespace LibraryApi.Controllers
             return Ok(records);
         }
 
-        [HttpGet("GetMostAndLessBorrowed")]
-        public IActionResult GetFilteredByBorrows()
+        [HttpGet("getmostandlessborrow/books")]
+        public IActionResult GetFilteredByMostAndLessBorrows()
         {
             BooksMostAndLessBorrow records = _bookService.GetBookMostAndLessBorrowed();
             if (records == null)
